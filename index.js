@@ -3,13 +3,30 @@ import path from "path"
 
 const alias8n = function(config) {
     switch (false) {
-        case !!config.ctxPath: 
-            throw Error("No context path found")
-        case fs.existsSync(path.resolve(config.ctxPath)):
+        case fs.existsSync(config.ctxPath):
             throw Error("No context file found by given path")
+        case fs.existsSync(config.source):
+            throw Error("No source file found by given path")
     }
 
     const ctx = JSON.parse(fs.readFileSync(config.ctxPath))
+    
+    let srcFile = fs.readFileSync(config.source).toString()
+
+    for (let alias in ctx) {
+        console.log(alias);
+        const aliasR = new RegExp(alias.trim(), 'g')
+        console.log(srcFile);
+        srcFile = srcFile.replace(aliasR, ctx[alias])
+        console.log(srcFile);
+        // console.log(newFileString);
+    }
+
+
+
+    //       a = a.toString().replace(r, newName)
+
+    //       fs.writeFileSync('./source/scss/blocks/' + file, a)
 
     // var name = path.basename;
     // var nameArr = name.toLowerCase().split("")
