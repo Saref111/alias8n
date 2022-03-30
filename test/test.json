@@ -1,4 +1,5 @@
 {
     "hello": "Hello World!",
-    "HELLO": "H W!"
+    "HELLO": "H W!",
+    "hello-template": "Hello <1>!"
 }

@@ -21,18 +21,47 @@ const alias8n = function(config) {
     
     let srcFile = fs.readFileSync(source).toString()
 
-    for (let alias in ctx) {
-        const aliasMarkerRegex = new RegExp(aliasMarker.replace(/\*/g, alias), "g")
-        srcFile = srcFile.replace(aliasMarkerRegex, ctx[alias])
-    }
+    // for (let alias in ctx) {
+
+    //     if (ctx[alias].match(/\<\d\>/g)) {
+    //         console.log(true);
+    //     }
+ 
+    //     const aliasMarkerRegex = new RegExp(aliasMarker.replace(/\*/g, alias), "g")
+    //     srcFile = srcFile.replace(aliasMarkerRegex, ctx[alias])
+    // }
+
+    const aliases = srcFile.match(/a\(:.*:\)/g)
+
+    aliases.forEach((rawAlias) => {
+        const alias = rawAlias.replace(/a\(:/, "").replace(/:\)/, "")
+        const aliasArgs = alias.split(',')
+        const aliasName = aliasArgs[0]
+
+        if (!ctx[aliasName]) return
+        
+        
+        if (aliasArgs.length < 2) {
+            const aliasValue = ctx[aliasName]
+            srcFile = srcFile.replace(rawAlias, aliasValue)
+        } else {
+            aliasArgs.forEach((arg, i) => {
+                if (i < 1) return
+                
+                const r = new RegExp(`<${i}>`, "g")
+                const aliasValue = ctx[aliasName].replace(r, arg.trim())
+                srcFile = srcFile.replace(rawAlias, aliasValue)
+            })
+        }
+    })
 
     fs.writeFileSync(dest, srcFile)
 }
 
-// alias8n({
-//     ctxPath: "test/test.json",
-//     source: "./test/test.html",
-//     dest: "./test/test-al.html",
-// })
+alias8n({
+    ctxPath: "test/test.json",
+    source: "./test/test.html",
+    dest: "./test/test-al.html",
+})
 
-export default alias8n
+// export default alias8n
