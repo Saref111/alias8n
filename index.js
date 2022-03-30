@@ -1,5 +1,5 @@
 import fs from "fs"
-import parser from "./parser.js"
+import Reducer from "./reducer.js"
 
 const alias8n = function(config) {
     const {
@@ -18,50 +18,14 @@ const alias8n = function(config) {
     }
 
     const ctx = JSON.parse(fs.readFileSync(ctxPath))
-    
     let srcFile = fs.readFileSync(source).toString()
-
+    
     const aliases = srcFile.match(/a\(:.*:\)/g)
 
-    aliases.forEach((rawAlias) => {
-        const rawAliasRegex = new RegExp(rawAlias, "g")
-        const [aliasName, aliasArgs, nesting] = parser(rawAlias)
+    const reducerConfig = {srcFile, ctx,  aliases}
+    const reducer = new Reducer(reducerConfig)
 
-        if (!ctx[aliasName]) return  
-        
-
-        if (aliasArgs.length < 2) {
-            const aliasValue = ctx[aliasName]
- 
-            if (Array.isArray(aliasValue)) {
-                aliasValue.forEach((value) => {
-                    srcFile = srcFile.replace(rawAlias, value)
-                })
-                return
-            }
-            
-            if (aliasValue instanceof Object) {
-                const value = nesting.reduce((acc, key) => {
-                    acc = acc[key] 
-                    return acc
-                }, ctx)
-
-                srcFile = srcFile.replace(rawAliasRegex, value)
-                return
-                
-            }
-        
-            srcFile = srcFile.replace(rawAliasRegex, aliasValue)
-        } else {
-            aliasArgs.forEach((arg, i) => {
-                if (i < 1) return
-                
-                const r = new RegExp(`<${i}>`, "g")
-                const aliasValue = ctx[aliasName].replace(r, arg.trim())
-                srcFile = srcFile.replace(rawAliasRegex, aliasValue)
-            })
-        }
-    })
+    srcFile = reducer.init()
 
     fs.writeFileSync(dest, srcFile)
 }
