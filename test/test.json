@@ -1,5 +1,6 @@
 {
     "hello": "Hello World!",
     "HELLO": "H W!",
-    "hello-template": "Hello <1>!"
+    "hello-template": "Hello <1>!",
+    "hello-array": ["Hello", "World!"]
 }

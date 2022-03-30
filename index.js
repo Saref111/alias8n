@@ -21,16 +21,6 @@ const alias8n = function(config) {
     
     let srcFile = fs.readFileSync(source).toString()
 
-    // for (let alias in ctx) {
-
-    //     if (ctx[alias].match(/\<\d\>/g)) {
-    //         console.log(true);
-    //     }
- 
-    //     const aliasMarkerRegex = new RegExp(aliasMarker.replace(/\*/g, alias), "g")
-    //     srcFile = srcFile.replace(aliasMarkerRegex, ctx[alias])
-    // }
-
     const aliases = srcFile.match(/a\(:.*:\)/g)
 
     aliases.forEach((rawAlias) => {
@@ -43,6 +33,14 @@ const alias8n = function(config) {
         
         if (aliasArgs.length < 2) {
             const aliasValue = ctx[aliasName]
+
+            if (Array.isArray(aliasValue)) {
+                aliasValue.forEach((value) => {
+                    srcFile = srcFile.replace(rawAlias, value)
+                })
+                return
+            }
+
             srcFile = srcFile.replace(rawAlias, aliasValue)
         } else {
             aliasArgs.forEach((arg, i) => {
