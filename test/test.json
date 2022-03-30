@@ -2,5 +2,8 @@
     "hello": "Hello World!",
     "HELLO": "H W!",
     "hello-template": "Hello <1>!",
-    "hello-array": ["Hello", "World!"]
+    "hello-array": ["Hello", "World!"],
+    "hello-object": {
+        "hello": "Hello World from object!"
+    }
 }

@@ -1,11 +1,11 @@
 import fs from "fs"
+import parser from "./parser.js"
 
 const alias8n = function(config) {
     const {
         ctxPath = "./ctx.json",
         source = "./index.html",
         dest = "./index-aliased.html",
-        aliasMarker = "a\\(:*:\\)", // use * for alias name
     } = config
 
     switch (false) {
@@ -24,31 +24,41 @@ const alias8n = function(config) {
     const aliases = srcFile.match(/a\(:.*:\)/g)
 
     aliases.forEach((rawAlias) => {
-        const alias = rawAlias.replace(/a\(:/, "").replace(/:\)/, "")
-        const aliasArgs = alias.split(',')
-        const aliasName = aliasArgs[0]
+        const rawAliasRegex = new RegExp(rawAlias, "g")
+        const [aliasName, aliasArgs, nesting] = parser(rawAlias)
 
-        if (!ctx[aliasName]) return
+        if (!ctx[aliasName]) return  
         
-        
+
         if (aliasArgs.length < 2) {
             const aliasValue = ctx[aliasName]
-
+ 
             if (Array.isArray(aliasValue)) {
                 aliasValue.forEach((value) => {
                     srcFile = srcFile.replace(rawAlias, value)
                 })
                 return
             }
+            
+            if (aliasValue instanceof Object) {
+                const value = nesting.reduce((acc, key) => {
+                    acc = acc[key] 
+                    return acc
+                }, ctx)
 
-            srcFile = srcFile.replace(rawAlias, aliasValue)
+                srcFile = srcFile.replace(rawAliasRegex, value)
+                return
+                
+            }
+        
+            srcFile = srcFile.replace(rawAliasRegex, aliasValue)
         } else {
             aliasArgs.forEach((arg, i) => {
                 if (i < 1) return
                 
                 const r = new RegExp(`<${i}>`, "g")
                 const aliasValue = ctx[aliasName].replace(r, arg.trim())
-                srcFile = srcFile.replace(rawAlias, aliasValue)
+                srcFile = srcFile.replace(rawAliasRegex, aliasValue)
             })
         }
     })
