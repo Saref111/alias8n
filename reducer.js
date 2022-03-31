@@ -13,32 +13,25 @@ export default class Reducer {
             const [aliasName, aliasArgs, nesting] = parser(rawAlias)
             
             if (!this.ctx[aliasName]) return  
-            
+
             this.reduce({aliasName, aliasArgs, nesting, rawAlias})
+
         })
 
         return this.srcFileString
     }
 
     reduce({rawAlias, nesting, aliasArgs, aliasName}) {
+        this.currentAlias = {rawAlias, nesting, aliasArgs, aliasName}
         this.nesting = nesting
         this.rawAlias = rawAlias
         this.rawAliasRegex = this.rawAlias
+        this.aliasArgs = aliasArgs
+        this.aliasName = aliasName
 
         const aliasValue = this.ctx[aliasName]
-
         
-        if (aliasArgs.length < 2) {
-            this.checkType(aliasValue)
-        } else {
-            aliasArgs.forEach((arg, i) => {
-                if (i < 1) return
-                
-                const r = new RegExp(`<${i}>`, "g")
-                const aliasValue = this.ctx[aliasName].replace(r, arg.trim())
-                this.mutateString(aliasValue)
-            })
-        }
+        this.checkType(aliasValue)        
     }
 
     reduceArray(aliasValue) {
@@ -56,22 +49,39 @@ export default class Reducer {
         this.checkType(value)
     }
 
+    reduceArgs() {
+        this.aliasArgs.forEach((arg, i) => {
+            if (i < 1) return
+            
+            const r = new RegExp(`<${i}>`, "g")
+            const aliasValue = this.ctx[this.aliasName].replace(r, arg.trim())
+            this.mutateString(aliasValue)
+        })
+    }
+
     mutateString(value) {
-        console.log(this.srcFileString);
-        this.srcFileString = this.srcFileString.replace(this.rawAliasRegex, value)
+        try {
+            this.srcFileString = this.srcFileString.replace(this.rawAliasRegex, value)
+        } catch (err) {
+            console.error(`Error while mutating string with alias: ${this.currentAlias}`)
+            console.error(err)
+        }
     }
     
-    checkType(value) {
+    async checkType(value) {
         switch (true) {
             case Array.isArray(value):
                 this.reduceArray(value)
                 return
             case value instanceof Object:
-                this.reduceObject()
+                
+                this.reduceObject(value) 
                 return
-            case typeof value === 'string':
+            case typeof value === 'string' && this.aliasArgs.length < 2:
                 this.mutateString(value)
                 return
+            case typeof value === 'string':
+                this.reduceArgs()
             default:
                 return
         }

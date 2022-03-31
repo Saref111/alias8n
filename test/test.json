@@ -4,6 +4,12 @@
     "hello-template": "Hello <1>!",
     "hello-array": ["Hello", "World!"],
     "hello-object": {
-        "hello": "Hello World from object!"
+        "hello": "Hello World from object!",
+        "hello-array": ["Hello", "from", "nested", "array!"],
+        "hello-object": {
+            "hello": "Hello World from object!",
+            "hello-array": ["Hello", "from", "nested", "array!"]
+            
+        }
     }
 }

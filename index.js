@@ -20,8 +20,8 @@ const alias8n = function(config) {
     const ctx = JSON.parse(fs.readFileSync(ctxPath))
     let srcFile = fs.readFileSync(source).toString()
     
-    const aliases = srcFile.match(/a\(:.*:\)/g)
-
+    const aliases = srcFile.match(/a\(:.*?:\)/g)
+    
     const reducerConfig = {srcFile, ctx,  aliases}
     const reducer = new Reducer(reducerConfig)
 
