@@ -31,6 +31,15 @@ Alias8n has several ways to replace aliases with its values.
     <p>a(:hello:)</p>
 #### output.html 
     <p>Hello World!</p>
++  ### Templates
+#### ctx.json
+    {
+        "hello-template": "<1>, <2>!"
+    }
+#### index.html
+    <p>a(:hello-template, Hello, World:)</p>
+#### output.html 
+    <p>Hello World!</p>
 
 
 
