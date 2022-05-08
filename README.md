@@ -2,13 +2,11 @@
 
 A simple tool to replace aliases in text files
 
-* * *
 
 ## Installation 
 
     npm i alias8n 
 
-* * *
 ## Using
 
 Start the program:
