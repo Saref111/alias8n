@@ -12,6 +12,7 @@ A simple tool to replace aliases in text files
 ## Using
 
 Start the program:
+
     import alias8n from 'alias8n';
     
     const config = {
