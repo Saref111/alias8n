@@ -31,10 +31,6 @@ const alias8n = function(config) {
 }
 
 // example
-// alias8n({
-//     ctxPath: "test/test.json",
-//     source: "./test/test.html",
-//     dest: "./test/test-al.html",
-// })
+// 
 
 export default alias8n

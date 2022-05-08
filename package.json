@@ -7,6 +7,7 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "nodemon index.js"
   },
+  "git": "https://github.com/Saref111/alias8n.git",
   "type": "module",
   "keywords": ["alias", "text", "file", "replace", "alias8n", "aliasolization"],
   "author": "1.0.0",
