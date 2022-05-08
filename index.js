@@ -30,7 +30,4 @@ const alias8n = function(config) {
     fs.writeFileSync(dest, srcFile)
 }
 
-// example
-// 
-
 export default alias8n
