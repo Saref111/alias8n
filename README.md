@@ -16,9 +16,9 @@ Start the program:
     import alias8n from 'alias8n';
     
     const config = {
-        ctxPath = "./ctx.json",
-        source = "./index.html",
-        dest = "./index-aliased.html",
+        ctxPath: "./ctx.json",
+        source: "./index.html",
+        dest: "./index-aliased.html",
     } /* These are default values */
     
     alias8n(config);
