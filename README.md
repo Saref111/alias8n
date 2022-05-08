@@ -40,6 +40,49 @@ Alias8n has several ways to replace aliases with its values.
     <p>a(:hello-template, Hello, World:)</p>
 #### output.html 
     <p>Hello World!</p>
++  ### Arrays *(can contain only strings)*
+#### ctx.json
+    {
+        "hello-array": ["Hello, World!", "Hello, Heaven!", "Hello, Hell!"]
+    }
+#### index.html
+    <p>a(:hello-array)</p>
+    <p>a(:hello-array)</p>
+    <p>a(:hello-array)</p>
+#### output.html 
+    <p>Hello World!</p>
+    <p>Hello Heaven!</p>
+    <p>Hello Hell!</p>
++  ### Objects and nesting
+#### ctx.json
+    {
+        "hello-obj": {
+            "hello": "Hello,",
+            "nested-object": {
+                "world": "World!"
+            },  
+            "nested-array": ["Hello, World!", "Hello, Heaven!", "Hello, Hell!"]
+        }
+    }
+#### index.html
+
+    <p>a(:hello-obj.hello:) a(hello-obj.nested-obj.world)</p>
+    
+    <ul>
+        <li>a(:hello-obj.nested-array:)</li>
+        <li>a(:hello-obj.nested-array:)</li>
+        <li>a(:hello-obj.nested-array:)</li>
+    </ul>
+
+
+#### output.html 
+    <p>Hello World!</p>
+    
+    <ul>
+        <li>Hello World!</li>
+        <li>Hello Heaven!</li>
+        <li>Hello Hell!</li>
+    </ul>
 
 
 
