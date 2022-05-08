@@ -1,6 +1,6 @@
 {
   "name": "alias8n",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "A simple tool to replace aliases in text files",
   "main": "index.js",
   "scripts": {
